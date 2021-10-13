@@ -1,23 +1,35 @@
-import logo from './logo.svg';
+import { DataStore } from '@aws-amplify/datastore';
+import { Album } from './models';
 import './App.css';
+import { useEffect } from "react"
 
 function App() {
+
+  useEffect(() => {
+    const pullData = async () => {
+      const models = await DataStore.query(Album);
+      console.log(models);
+    }
+    pullData()
+  }, [])
+
+
+
+
+  const AddAlbum = async () => {
+
+    await DataStore.save(
+      new Album({
+        "title": window.prompt(),
+        "description": window.prompt(),
+        "order": 1020
+      })
+    );
+  }
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <button onClick={AddAlbum}>Add Album</button>
     </div>
   );
 }
